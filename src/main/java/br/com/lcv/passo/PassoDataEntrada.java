@@ -10,7 +10,7 @@ public class PassoDataEntrada implements Passo {
     private static final String MENSAGEM_EXEMPLO_DATA = "Digite a data no formato dd/mm/aaaa. Ex: 10/09/2019";
 
     @Override
-    public SendMessage executa(Long chatId, String texto, Sessao sessao) {
+    public SendMessage executa(String chatId, String texto, Sessao sessao) {
         sessao.getReservaDTO().getDadosBusca().defineDataEntrada(texto);
         sessao.adicionaAtributoPassoCorrente(PassoCorrente.PREENCHIMENTO_DATA_SAIDA);
 

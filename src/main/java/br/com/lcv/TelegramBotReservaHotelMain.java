@@ -4,9 +4,9 @@ import br.com.lcv.bot.BotInterface;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.telegram.telegrambots.ApiContextInitializer;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 
 import javax.annotation.PostConstruct;
 
@@ -22,11 +22,9 @@ public class TelegramBotReservaHotelMain {
 
     @PostConstruct
     public void init() {
-        ApiContextInitializer.init();
-
-        TelegramBotsApi botsApi = new TelegramBotsApi();
         try {
-            botsApi.registerBot(botInterface());
+            TelegramBotsApi telegramBotsApi = new TelegramBotsApi(DefaultBotSession.class);
+            telegramBotsApi.registerBot(botInterface());
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }

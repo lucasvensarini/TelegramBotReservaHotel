@@ -71,11 +71,11 @@ public class KeyboardService {
         for (int i = numeroMinimoHospedes; i < 10; i++) {
             String textoBotao = String.valueOf(i);
             if (i < 4) {
-                linha1.add(new InlineKeyboardButton(textoBotao).setCallbackData(prefixoCallback + textoBotao));
+                linha1.add(InlineKeyboardButton.builder().text(textoBotao).callbackData(prefixoCallback + textoBotao).build());
             } else if (i < 7) {
-                linha2.add(new InlineKeyboardButton(textoBotao).setCallbackData(prefixoCallback + textoBotao));
+                linha2.add(InlineKeyboardButton.builder().text(textoBotao).callbackData(prefixoCallback + textoBotao).build());
             } else {
-                linha3.add(new InlineKeyboardButton(textoBotao).setCallbackData(prefixoCallback + textoBotao));
+                linha3.add(InlineKeyboardButton.builder().text(textoBotao).callbackData(prefixoCallback + textoBotao).build());
             }
         }
 
@@ -100,7 +100,7 @@ public class KeyboardService {
                 textoBotao = "Não, quero ver todos os resultados";
             }
             List<InlineKeyboardButton> linha = new ArrayList<>();
-            linha.add(new InlineKeyboardButton(textoBotao).setCallbackData(prefixoCallback + classificacao.getValor()));
+            linha.add(InlineKeyboardButton.builder().text(textoBotao).callbackData(prefixoCallback + classificacao.getValor()).build());
 
             teclado.add(linha);
         }
@@ -122,7 +122,7 @@ public class KeyboardService {
             Long hotelId = hotel.getId();
 
             List<InlineKeyboardButton> linha = new ArrayList<>();
-            linha.add(new InlineKeyboardButton(textoBotao).setCallbackData(prefixoCallback + hotelId));
+            linha.add(InlineKeyboardButton.builder().text(textoBotao).callbackData(prefixoCallback + hotelId).build());
 
             teclado.add(linha);
         }
@@ -142,7 +142,7 @@ public class KeyboardService {
         String prefixoCallbackVoltar = PREFIXO_CALLBACK_VOLTAR_HOTEIS + CALLBACK_DELIMITADOR;
 
         List<InlineKeyboardButton> linhaMaisInfoHotel = new ArrayList<>();
-        linhaMaisInfoHotel.add(new InlineKeyboardButton("Ver mais informações").setCallbackData(prefixoCallbackMaisInfo));
+        linhaMaisInfoHotel.add(InlineKeyboardButton.builder().text("Ver mais informações").callbackData(prefixoCallbackMaisInfo).build());
 
         teclado.add(linhaMaisInfoHotel);
 
@@ -151,13 +151,13 @@ public class KeyboardService {
             Long quartoId = quarto.getId();
 
             List<InlineKeyboardButton> linha = new ArrayList<>();
-            linha.add(new InlineKeyboardButton(textoBotao).setCallbackData(prefixoCallback + quartoId));
+            linha.add(InlineKeyboardButton.builder().text(textoBotao).callbackData(prefixoCallback + quartoId).build());
 
             teclado.add(linha);
         }
 
         List<InlineKeyboardButton> linhaVoltar = new ArrayList<>();
-        linhaVoltar.add(new InlineKeyboardButton("<- Voltar à lista de hotéis").setCallbackData(prefixoCallbackVoltar));
+        linhaVoltar.add(InlineKeyboardButton.builder().text("<- Voltar à lista de hotéis").callbackData(prefixoCallbackVoltar).build());
 
         teclado.add(linhaVoltar);
 
@@ -174,7 +174,7 @@ public class KeyboardService {
         String prefixoCallbackMaisInfo = PREFIXO_CALLBACK_MAIS_INFO_QUARTO + CALLBACK_DELIMITADOR;
 
         List<InlineKeyboardButton> linhaMaisInfoQuarto = new ArrayList<>();
-        linhaMaisInfoQuarto.add(new InlineKeyboardButton("Ver mais informações").setCallbackData(prefixoCallbackMaisInfo));
+        linhaMaisInfoQuarto.add(InlineKeyboardButton.builder().text("Ver mais informações").callbackData(prefixoCallbackMaisInfo).build());
 
         teclado.add(linhaMaisInfoQuarto);
 
@@ -207,7 +207,7 @@ public class KeyboardService {
                 textoBotao = "Preencher dados do hóspede " + indiceHospedeTexto + " (" + hospede.getFaixaEtaria() + ")";
 
                 List<InlineKeyboardButton> linha = new ArrayList<>();
-                linha.add(new InlineKeyboardButton(textoBotao).setCallbackData(prefixoCallbackPreencherHospedes + indiceHospede));
+                linha.add(InlineKeyboardButton.builder().text(textoBotao).callbackData(prefixoCallbackPreencherHospedes + indiceHospede).build());
 
                 teclado.add(linha);
             } else {
@@ -218,7 +218,7 @@ public class KeyboardService {
                 }
 
                 List<InlineKeyboardButton> linha = new ArrayList<>();
-                linha.add(new InlineKeyboardButton(textoBotao).setCallbackData(prefixoCallbackListarDados + indiceHospede));
+                linha.add(InlineKeyboardButton.builder().text(textoBotao).callbackData(prefixoCallbackListarDados + indiceHospede).build());
 
                 teclado.add(linha);
             }
@@ -253,13 +253,13 @@ public class KeyboardService {
 
         for (String dado : dados) {
             List<InlineKeyboardButton> linha = new ArrayList<>();
-            linha.add(new InlineKeyboardButton(dado).setCallbackData(prefixoCallbackModificarDados + dado));
+            linha.add(InlineKeyboardButton.builder().text(dado).callbackData(prefixoCallbackModificarDados + dado).build());
 
             teclado.add(linha);
         }
 
         List<InlineKeyboardButton> linhaSair = new ArrayList<>();
-        linhaSair.add(new InlineKeyboardButton("Tudo OK!").setCallbackData(prefixoCallbackSair));
+        linhaSair.add(InlineKeyboardButton.builder().text("Tudo OK!").callbackData(prefixoCallbackSair).build());
 
         teclado.add(linhaSair);
 
@@ -294,7 +294,7 @@ public class KeyboardService {
 
         for (Hospede adulto : adultos) {
             List<InlineKeyboardButton> linhaAdultos = new ArrayList<>();
-            linhaAdultos.add(new InlineKeyboardButton(adulto.getNome()).setCallbackData(prefixoCallback + adulto.getCpf()));
+            linhaAdultos.add(InlineKeyboardButton.builder().text(adulto.getNome()).callbackData(prefixoCallback + adulto.getCpf()).build());
 
             teclado.add(linhaAdultos);
         }
@@ -312,10 +312,10 @@ public class KeyboardService {
         List<List<InlineKeyboardButton>> teclado = new ArrayList<>();
 
         List<InlineKeyboardButton> linha1 = new ArrayList<>();
-        linha1.add(new InlineKeyboardButton(textoOpcao1).setCallbackData(callbackOpcao1));
+        linha1.add(InlineKeyboardButton.builder().text(textoOpcao1).callbackData(callbackOpcao1).build());
 
         List<InlineKeyboardButton> linha2 = new ArrayList<>();
-        linha2.add(new InlineKeyboardButton(textoOpcao2).setCallbackData(callbackOpcao2));
+        linha2.add(InlineKeyboardButton.builder().text(textoOpcao2).callbackData(callbackOpcao2).build());
 
         teclado.add(linha1);
         teclado.add(linha2);

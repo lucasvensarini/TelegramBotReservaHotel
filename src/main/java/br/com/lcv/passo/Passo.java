@@ -5,6 +5,6 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
 public interface Passo {
 
-    SendMessage executa(Long chatId, String texto, Sessao sessao);
+    SendMessage executa(String chatId, String texto, Sessao sessao);
 
 }

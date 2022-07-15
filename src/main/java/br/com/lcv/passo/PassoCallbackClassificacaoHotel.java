@@ -19,8 +19,8 @@ import java.util.List;
 @Component
 public class PassoCallbackClassificacaoHotel implements PassoCallback {
 
-    private KeyboardService keyboardService;
-    private HotelService hotelService;
+    private final KeyboardService keyboardService;
+    private final HotelService hotelService;
 
     @Autowired
     public PassoCallbackClassificacaoHotel(KeyboardService keyboardService, HotelService hotelService) {
@@ -29,22 +29,21 @@ public class PassoCallbackClassificacaoHotel implements PassoCallback {
     }
 
     @Override
-    public List<Mensagem> executa(Integer usuarioTelegramId, Long chatId, String valorCallback, Sessao sessao) {
+    public List<Mensagem> executa(long usuarioTelegramId, String chatId, String valorCallback, Sessao sessao) {
         List<Mensagem> mensagens = new ArrayList<>();
 
         int classificacaoValor = Integer.parseInt(valorCallback);
         Classificacao classificacao = Classificacao.getClassificacaoByValor(classificacaoValor);
         sessao.getReservaDTO().getDadosBusca().setClassificacao(classificacao);
 
-        SendMessage sendMessage = new SendMessage().setChatId(chatId);
-
         List<Hotel> hoteis = hotelService.buscaHoteis(sessao.getReservaDTO());
         sessao.adicionaAtributoHoteisListados(hoteis);
         sessao.adicionaAtributoPassoCorrente(PassoCorrente.ESCOLHA_HOTEL);
 
         InlineKeyboardMarkup inlineKeyboardMarkup = keyboardService.montaListaHoteisKeyboard(hoteis);
-        sendMessage.setText("Encontrei esses hotéis. Selecione um para ver mais detalhes e os quartos disponíveis.");
-        sendMessage.setReplyMarkup(inlineKeyboardMarkup);
+        SendMessage sendMessage = SendMessage.builder().chatId(chatId)
+                .text("Encontrei esses hotéis. Selecione um para ver mais detalhes e os quartos disponíveis.")
+                .replyMarkup(inlineKeyboardMarkup).build();
 
         mensagens.add(new Mensagem(new SendMessage(chatId, "Vou buscar alguns hotéis pra você. Só um segundo...")));
         mensagens.add(new Mensagem(sendMessage));

@@ -13,7 +13,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 @Component
 public class PassoNomeHospede implements Passo {
 
-    private MensagemUtil mensagemUtil;
+    private final MensagemUtil mensagemUtil;
 
     @Autowired
     public PassoNomeHospede(MensagemUtil mensagemUtil) {
@@ -21,7 +21,7 @@ public class PassoNomeHospede implements Passo {
     }
 
     @Override
-    public SendMessage executa(Long chatId, String texto, Sessao sessao) {
+    public SendMessage executa(String chatId, String texto, Sessao sessao) {
         Hospede hospedeCorrente = sessao.getHospedeCorrente();
         hospedeCorrente.defineNome(texto);
 

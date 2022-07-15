@@ -16,6 +16,6 @@ public class Usuario {
     private Long id;
 
     @Column(nullable = false)
-    private int telegramId;
+    private long telegramId;
 
 }

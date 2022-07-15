@@ -22,9 +22,9 @@ import java.util.List;
 @Component
 public class PassoCallbackIniciaCriacaoReserva implements PassoCallback {
 
-    private HospedeService hospedeService;
-    private ReservaService reservaService;
-    private SessaoService sessaoService;
+    private final HospedeService hospedeService;
+    private final ReservaService reservaService;
+    private final SessaoService sessaoService;
 
     @Autowired
     public PassoCallbackIniciaCriacaoReserva(HospedeService hospedeService, ReservaService reservaService, SessaoService sessaoService) {
@@ -34,7 +34,7 @@ public class PassoCallbackIniciaCriacaoReserva implements PassoCallback {
     }
 
     @Override
-    public List<Mensagem> executa(Integer usuarioTelegramId, Long chatId, String valorCallback, Sessao sessao) {
+    public List<Mensagem> executa(long usuarioTelegramId, String chatId, String valorCallback, Sessao sessao) {
 
         ReservaDTO reservaDTO = sessao.getReservaDTO();
         Hotel hotelSelecionado = sessao.getHotelSelecionado();
@@ -45,7 +45,7 @@ public class PassoCallbackIniciaCriacaoReserva implements PassoCallback {
         return new ArrayList<>(criaReserva(usuarioTelegramId, chatId, reservaDTO, hotelSelecionado, quartoSelecionado, hospedeResponsavel));
     }
 
-    private List<Mensagem> criaReserva(Integer usuarioTelegramId, Long chatId, ReservaDTO reservaDTO, Hotel hotelSelecionado,
+    private List<Mensagem> criaReserva(long usuarioTelegramId, String chatId, ReservaDTO reservaDTO, Hotel hotelSelecionado,
                                        Quarto quartoSelecionado, Hospede hospedeResponsavel) {
 
         List<Mensagem> mensagens = new ArrayList<>();
@@ -60,12 +60,12 @@ public class PassoCallbackIniciaCriacaoReserva implements PassoCallback {
         return mensagens;
     }
 
-    private SendMessage exibeInformacoesReserva(Long chatId, Reserva reserva) {
+    private SendMessage exibeInformacoesReserva(String chatId, Reserva reserva) {
         String mensagem = "Sua reserva foi criada com sucesso! Segue informações:" + "\n\n" + reserva.listaDadosReserva();
-        return new SendMessage(chatId, mensagem).enableHtml(true);
+        return SendMessage.builder().chatId(chatId).text(mensagem).parseMode("html").build();
     }
 
-    private SendMessage enviaMensagemInicial(Long chatId) {
+    private SendMessage enviaMensagemInicial(String chatId) {
         String mensagem = "Utilize os seguintes comandos:" + "\n\n" + "/reservarhotel - Inicia processo de reserva de hotel.";
         return new SendMessage(chatId, mensagem);
     }

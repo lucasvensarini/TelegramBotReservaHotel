@@ -61,7 +61,7 @@ public class ReservaService {
     }
 
     public Reserva reservaHotel(Hotel hotelSelecionado, Quarto quartoSelecionado, Hospede hospedeResponsavel, ReservaDTO reservaDTO,
-                                int usuarioTelegramId) {
+                                long usuarioTelegramId) {
 
         String loc = "abc123";
         LocalDateTime criacao = DataUtil.defineDataHoraAtual();

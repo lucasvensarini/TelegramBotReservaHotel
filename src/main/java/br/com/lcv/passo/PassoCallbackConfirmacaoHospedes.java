@@ -20,8 +20,8 @@ import java.util.List;
 @Component
 public class PassoCallbackConfirmacaoHospedes implements PassoCallback {
 
-    private ReservaService reservaService;
-    private KeyboardService keyboardService;
+    private final ReservaService reservaService;
+    private final KeyboardService keyboardService;
 
     @Autowired
     public PassoCallbackConfirmacaoHospedes(ReservaService reservaService, KeyboardService keyboardService) {
@@ -30,7 +30,7 @@ public class PassoCallbackConfirmacaoHospedes implements PassoCallback {
     }
 
     @Override
-    public List<Mensagem> executa(Integer usuarioTelegramId, Long chatId, String valorCallback, Sessao sessao) {
+    public List<Mensagem> executa(long usuarioTelegramId, String chatId, String valorCallback, Sessao sessao) {
         List<Mensagem> mensagens = new ArrayList<>();
 
         sessao.adicionaAtributoPassoCorrente(PassoCorrente.CONFIRMAR_INFORMACOES);
@@ -43,8 +43,7 @@ public class PassoCallbackConfirmacaoHospedes implements PassoCallback {
         String mensagem = "Fechou! Posso finalizar a reserva?" + "\n\n" + resumoInformacoes;
         InlineKeyboardMarkup inlineKeyboardMarkup = keyboardService.montaConfirmacaoInformacoesReservaKeyboard();
 
-        SendMessage sendMessage = new SendMessage(chatId, mensagem).enableHtml(true).setReplyMarkup(inlineKeyboardMarkup);
-
+        SendMessage sendMessage = SendMessage.builder().chatId(chatId).text(mensagem).replyMarkup(inlineKeyboardMarkup).parseMode("html").build();
         mensagens.add(new Mensagem(sendMessage));
 
         return mensagens;

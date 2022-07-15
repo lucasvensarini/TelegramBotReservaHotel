@@ -14,8 +14,8 @@ import java.util.List;
 @Component
 public class PassoCallbackReiniciaProcesso implements PassoCallback {
 
-    private SessaoService sessaoService;
-    private MensagemUtil mensagemUtil;
+    private final SessaoService sessaoService;
+    private final MensagemUtil mensagemUtil;
 
     @Autowired
     public PassoCallbackReiniciaProcesso(SessaoService sessaoService, MensagemUtil mensagemUtil) {
@@ -24,7 +24,7 @@ public class PassoCallbackReiniciaProcesso implements PassoCallback {
     }
 
     @Override
-    public List<Mensagem> executa(Integer usuarioTelegramId, Long chatId, String valorCallback, Sessao sessao) {
+    public List<Mensagem> executa(long usuarioTelegramId, String chatId, String valorCallback, Sessao sessao) {
         List<Mensagem> mensagens = new ArrayList<>();
 
         sessaoService.encerraSessaoUsuario(usuarioTelegramId);

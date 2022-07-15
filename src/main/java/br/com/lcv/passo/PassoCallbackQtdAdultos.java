@@ -15,7 +15,7 @@ public class PassoCallbackQtdAdultos implements PassoCallback {
 
     private static final String MENSAGEM_DEFINICAO_CRIANCA = "Crianças são pessoas com idade entre 1 e 12 anos";
 
-    private KeyboardService keyboardService;
+    private final KeyboardService keyboardService;
 
     @Autowired
     public PassoCallbackQtdAdultos(KeyboardService keyboardService) {
@@ -23,7 +23,7 @@ public class PassoCallbackQtdAdultos implements PassoCallback {
     }
 
     @Override
-    public List<Mensagem> executa(Integer usuarioTelegramId, Long chatId, String valorCallback, Sessao sessao) {
+    public List<Mensagem> executa(long usuarioTelegramId, String chatId, String valorCallback, Sessao sessao) {
         List<Mensagem> mensagens = new ArrayList<>();
 
         int qtdHospedesADT = Integer.parseInt(valorCallback);
@@ -32,7 +32,7 @@ public class PassoCallbackQtdAdultos implements PassoCallback {
 
         String mensagem = "Quantas crianças vão se hospedar?" + "\n\n" + MENSAGEM_DEFINICAO_CRIANCA;
         InlineKeyboardMarkup inlineKeyboardMarkup = keyboardService.montaQtdHospedesKeyboard(KeyboardService.PREFIXO_CALLBACK_HOSPEDES_CHD);
-        SendMessage sendMessage = new SendMessage(chatId, mensagem).setReplyMarkup(inlineKeyboardMarkup);
+        SendMessage sendMessage = SendMessage.builder().chatId(chatId).text(mensagem).replyMarkup(inlineKeyboardMarkup).build();
 
         mensagens.add(new Mensagem(sendMessage));
 

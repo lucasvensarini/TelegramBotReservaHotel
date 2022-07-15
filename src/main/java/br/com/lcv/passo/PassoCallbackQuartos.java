@@ -24,11 +24,11 @@ import java.util.List;
 @Component
 public class PassoCallbackQuartos implements PassoCallback {
 
-    private HotelService hotelService;
-    private ReservaService reservaService;
-    private HospedeService hospedeService;
-    private KeyboardService keyboardService;
-    private MensagemUtil mensagemUtil;
+    private final HotelService hotelService;
+    private final ReservaService reservaService;
+    private final HospedeService hospedeService;
+    private final KeyboardService keyboardService;
+    private final MensagemUtil mensagemUtil;
 
     @Autowired
     public PassoCallbackQuartos(HotelService hotelService, ReservaService reservaService, HospedeService hospedeService,
@@ -41,7 +41,7 @@ public class PassoCallbackQuartos implements PassoCallback {
     }
 
     @Override
-    public List<Mensagem> executa(Integer usuarioTelegramId, Long chatId, String valorCallback, Sessao sessao) {
+    public List<Mensagem> executa(long usuarioTelegramId, String chatId, String valorCallback, Sessao sessao) {
         List<Mensagem> mensagens = new ArrayList<>();
 
         long quartoId = Long.parseLong(valorCallback);
@@ -56,7 +56,7 @@ public class PassoCallbackQuartos implements PassoCallback {
 
         String mensagem = quartoSelecionado.listaDadosQuarto();
         InlineKeyboardMarkup inlineKeyboardMarkup = keyboardService.montaMaisInfoQuartoKeyboard();
-        SendMessage sendMessageInfosQuarto = new SendMessage(chatId, mensagem).enableHtml(true).setReplyMarkup(inlineKeyboardMarkup);
+        SendMessage sendMessageInfosQuarto = SendMessage.builder().chatId(chatId).text(mensagem).replyMarkup(inlineKeyboardMarkup).parseMode("html").build();
 
         BigDecimal valorReserva = reservaService.calculaValorReserva(quartoSelecionado);
         String hospedesReservaToString = hospedeService.qtdHospedesToString(hospedes);
@@ -70,8 +70,7 @@ public class PassoCallbackQuartos implements PassoCallback {
                 + ". Posso prosseguir com a reserva?";
 
         InlineKeyboardMarkup inlineKeyboardMarkupConfirmacaoQuarto = keyboardService.montaConfirmacaoQuartoEscolhidoKeyboard();
-        SendMessage sendMessageConfirmacaoQuarto = new SendMessage(chatId, mensagemConfirmacaoQuarto)
-                .enableHtml(true).setReplyMarkup(inlineKeyboardMarkupConfirmacaoQuarto);
+        SendMessage sendMessageConfirmacaoQuarto = SendMessage.builder().chatId(chatId).text(mensagem).replyMarkup(inlineKeyboardMarkupConfirmacaoQuarto).parseMode("html").build();
 
         mensagens.add(new Mensagem(mensagemUtil.criaMediaGroup(chatId, quartoSelecionado.getUrlThumbnail(), quartoSelecionado.getUrlFotos())));
         mensagens.add(new Mensagem(sendMessageInfosQuarto));

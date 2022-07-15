@@ -61,8 +61,8 @@ public class BotInterface extends TelegramLongPollingBot {
     public void onUpdateReceived(Update update) {
         if (update.hasMessage() && update.getMessage().hasText()) {
             Message message = update.getMessage();
-            Integer usuarioId = message.getFrom().getId();
-            Long chatId = message.getChatId();
+            long usuarioId = update.getMessage().getFrom().getId();
+            String chatId = message.getChatId().toString();
             String text = message.getText();
             if (text.startsWith("/start")) {
                 enviaMensagem(mensagemUtil.enviaMensagemInicial(chatId));
@@ -85,8 +85,8 @@ public class BotInterface extends TelegramLongPollingBot {
             }
         } else if (update.hasCallbackQuery()) {
             CallbackQuery callbackQuery = update.getCallbackQuery();
-            Integer usuarioId = callbackQuery.getFrom().getId();
-            Long chatId = callbackQuery.getMessage().getChatId();
+            long usuarioId = callbackQuery.getFrom().getId();
+            String chatId = callbackQuery.getMessage().getChatId().toString();
             try {
                 validaSessao(usuarioId);
                 validaUsuario(usuarioId);
@@ -110,16 +110,16 @@ public class BotInterface extends TelegramLongPollingBot {
         }
     }
 
-    private void validaUsuario(int usuarioId) {
+    private void validaUsuario(long usuarioId) {
         sessaoService.validaUsuario(usuarioId);
     }
 
-    private void validaSessao(int usuarioId) {
+    private void validaSessao(long usuarioId) {
         sessaoService.validaSessao(usuarioId);
     }
 
     private SendMessage iniciaReservaHotel(Message message) {
-        Integer usuarioId = message.getFrom().getId();
+        long usuarioId = message.getFrom().getId();
         try {
             usuarioService.buscaUsuarioPorTelegramId(usuarioId);
 
@@ -132,15 +132,15 @@ public class BotInterface extends TelegramLongPollingBot {
             String primeiroNome = message.getFrom().getFirstName();
             String mensagem = "Olá, " + primeiroNome + "!" + "\n\n" + "Vamos começar a reservar seu hotel. Você sabe o nome do hotel?";
 
-            return enviaTecladoConfirmacaoNomeHotel(message.getChatId(), mensagem);
+            return enviaTecladoConfirmacaoNomeHotel(message.getChatId().toString(), mensagem);
         } catch (UsuarioNaoAutorizadoException e) {
-            return new SendMessage(message.getChatId(), e.getMessage());
+            return SendMessage.builder().chatId(message.getChatId().toString()).text(e.getMessage()).build();
         }
     }
 
-    private SendMessage enviaTecladoConfirmacaoNomeHotel(Long chatId, String mensagem) {
+    private SendMessage enviaTecladoConfirmacaoNomeHotel(String chatId, String mensagem) {
         InlineKeyboardMarkup inlineKeyboardMarkup = keyboardService.montaConfirmacaoNomeHotelKeyboard();
-        return new SendMessage(chatId, mensagem).setReplyMarkup(inlineKeyboardMarkup);
+        return SendMessage.builder().chatId(chatId).text(mensagem).replyMarkup(inlineKeyboardMarkup).build();
     }
 
     private void enviaMensagem(SendMediaGroup sendMediaGroup) {

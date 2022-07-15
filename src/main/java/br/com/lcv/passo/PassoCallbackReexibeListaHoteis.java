@@ -17,7 +17,7 @@ import java.util.List;
 @Component
 public class PassoCallbackReexibeListaHoteis implements PassoCallback {
 
-    private KeyboardService keyboardService;
+    private final KeyboardService keyboardService;
 
     @Autowired
     public PassoCallbackReexibeListaHoteis(KeyboardService keyboardService) {
@@ -25,7 +25,7 @@ public class PassoCallbackReexibeListaHoteis implements PassoCallback {
     }
 
     @Override
-    public List<Mensagem> executa(Integer usuarioTelegramId, Long chatId, String valorCallback, Sessao sessao) {
+    public List<Mensagem> executa(long usuarioTelegramId, String chatId, String valorCallback, Sessao sessao) {
         List<Mensagem> mensagens = new ArrayList<>();
 
         List<Hotel> hoteisListados = sessao.getHoteisListados();
@@ -34,7 +34,7 @@ public class PassoCallbackReexibeListaHoteis implements PassoCallback {
 
         String texto = "Encontrei esses hotéis. Selecione um para ver mais detalhes e os quartos disponíveis.";
         InlineKeyboardMarkup inlineKeyboardMarkup = keyboardService.montaListaHoteisKeyboard(hoteisListados);
-        SendMessage sendMessage = new SendMessage(chatId, texto).setReplyMarkup(inlineKeyboardMarkup);
+        SendMessage sendMessage = SendMessage.builder().chatId(chatId).text(texto).replyMarkup(inlineKeyboardMarkup).build();
 
         mensagens.add(new Mensagem(sendMessage));
 

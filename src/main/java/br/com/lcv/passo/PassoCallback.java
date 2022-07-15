@@ -9,6 +9,6 @@ import java.util.List;
  */
 public interface PassoCallback {
 
-    List<Mensagem> executa(Integer usuarioTelegramId, Long chatId, String valorCallback, Sessao sessao);
+    List<Mensagem> executa(long usuarioTelegramId, String chatId, String valorCallback, Sessao sessao);
 
 }

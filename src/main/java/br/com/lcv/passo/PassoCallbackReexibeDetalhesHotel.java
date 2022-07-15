@@ -2,7 +2,6 @@ package br.com.lcv.passo;
 
 import br.com.lcv.bot.KeyboardService;
 import br.com.lcv.hotel.Hotel;
-import br.com.lcv.hotel.HotelService;
 import br.com.lcv.sessao.Sessao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -18,17 +17,15 @@ import java.util.List;
 @Component
 public class PassoCallbackReexibeDetalhesHotel implements PassoCallback {
 
-    private HotelService hotelService;
-    private KeyboardService keyboardService;
+    private final KeyboardService keyboardService;
 
     @Autowired
-    public PassoCallbackReexibeDetalhesHotel(HotelService hotelService, KeyboardService keyboardService) {
-        this.hotelService = hotelService;
+    public PassoCallbackReexibeDetalhesHotel(KeyboardService keyboardService) {
         this.keyboardService = keyboardService;
     }
 
     @Override
-    public List<Mensagem> executa(Integer usuarioTelegramId, Long chatId, String valorCallback, Sessao sessao) {
+    public List<Mensagem> executa(long usuarioTelegramId, String chatId, String valorCallback, Sessao sessao) {
         List<Mensagem> mensagens = new ArrayList<>();
 
         Hotel hotelSelecionado = sessao.getHotelSelecionado();
@@ -37,7 +34,7 @@ public class PassoCallbackReexibeDetalhesHotel implements PassoCallback {
 
         String mensagem = hotelSelecionado.listaDadosHotel();
         InlineKeyboardMarkup inlineKeyboardMarkup = keyboardService.montaMaisInfoListaQuartosHotelKeyboard(hotelSelecionado.getQuartos());
-        SendMessage sendMessage = new SendMessage(chatId, mensagem).enableHtml(true).setReplyMarkup(inlineKeyboardMarkup);
+        SendMessage sendMessage = SendMessage.builder().chatId(chatId).text(mensagem).replyMarkup(inlineKeyboardMarkup).parseMode("html").build();
 
         mensagens.add(new Mensagem(sendMessage));
 

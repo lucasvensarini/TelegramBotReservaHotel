@@ -14,7 +14,7 @@ import java.util.List;
 public class PassoCallbackMaisInfoQuarto implements PassoCallback {
 
     @Override
-    public List<Mensagem> executa(Integer usuarioTelegramId, Long chatId, String valorCallback, Sessao sessao) {
+    public List<Mensagem> executa(long usuarioTelegramId, String chatId, String valorCallback, Sessao sessao) {
         List<Mensagem> mensagens = new ArrayList<>();
 
         SendMessage sendMessage = new SendMessage(chatId, sessao.getQuartoSelecionado().listaInformacoesAdicionais());

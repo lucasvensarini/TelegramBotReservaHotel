@@ -25,8 +25,8 @@ public class MensagemUtil {
     private static final String MENSAGEM_EXEMPLO_CPF = "Digite o número sem letras. Ex: 13271557888";
     private static final String MENSAGEM_EXEMPLO_DATA = "Digite a data no formato dd/mm/aaaa. Ex: 10/09/2019";
 
-    private KeyboardService keyboardService;
-    private HospedeService hospedeService;
+    private final KeyboardService keyboardService;
+    private final HospedeService hospedeService;
 
     @Autowired
     public MensagemUtil(KeyboardService keyboardService, HospedeService hospedeService) {
@@ -34,33 +34,33 @@ public class MensagemUtil {
         this.hospedeService = hospedeService;
     }
 
-    public SendMessage enviaMensagemInicial(Long chatId) {
+    public SendMessage enviaMensagemInicial(String chatId) {
         String mensagem = "Utilize os seguintes comandos:" + "\n\n" + "/reservarhotel - Inicia processo de reserva de hotel.";
         return new SendMessage(chatId, mensagem);
     }
 
-    SendMessage exibePreenchimentoCidade(Long chatId) {
+    SendMessage exibePreenchimentoCidade(String chatId) {
         return new SendMessage(chatId, "Em qual cidade você gostaria de reservar um hotel?");
     }
 
-    SendMessage exibePreenchimentoNome(Long chatId) {
+    SendMessage exibePreenchimentoNome(String chatId) {
         return new SendMessage(chatId, "Nome?");
     }
 
-    SendMessage exibePreenchimentoCPF(Long chatId) {
+    SendMessage exibePreenchimentoCPF(String chatId) {
         return new SendMessage(chatId, "CPF?" + "\n\n" + MENSAGEM_EXEMPLO_CPF);
     }
 
-    SendMessage exibePreenchimentoSexo(Long chatId) {
+    SendMessage exibePreenchimentoSexo(String chatId) {
         InlineKeyboardMarkup inlineKeyboardMarkup = keyboardService.montaSexoHospedeKeyboard();
-        return new SendMessage(chatId, "Sexo?").enableHtml(true).setReplyMarkup(inlineKeyboardMarkup);
+        return SendMessage.builder().chatId(chatId).text("Sexo?").replyMarkup(inlineKeyboardMarkup).build();
     }
 
-    SendMessage exibePreenchimentoDataNascimento(Long chatId) {
+    SendMessage exibePreenchimentoDataNascimento(String chatId) {
         return new SendMessage(chatId, "Data de nascimento?" + "\n\n" + MENSAGEM_EXEMPLO_DATA);
     }
 
-    SendMessage exibeResumoInformacoesOuContnuaPreenchendoDados(Long chatId, Sessao sessao) {
+    SendMessage exibeResumoInformacoesOuContnuaPreenchendoDados(String chatId, Sessao sessao) {
         ReservaDTO reservaDTO = sessao.getReservaDTO();
         if (!hospedeService.isTodosDadosHospedesPreenchidos(reservaDTO.getHospedes())) {
             return continuaPreechimentoDadosHospedes(chatId, sessao);
@@ -70,7 +70,7 @@ public class MensagemUtil {
         }
     }
 
-    private SendMessage continuaPreechimentoDadosHospedes(Long chatId, Sessao sessao) {
+    private SendMessage continuaPreechimentoDadosHospedes(String chatId, Sessao sessao) {
         ReservaDTO reservaDTO = sessao.getReservaDTO();
         Hospede hospede = sessao.getHospedeCorrente();
 
@@ -80,35 +80,33 @@ public class MensagemUtil {
         return enviaListaHospedes(chatId, mensagem, reservaDTO.getHospedes());
     }
 
-    private SendMessage enviaListaHospedes(Long chatId, String mensagem, List<Hospede> hospedes) {
+    private SendMessage enviaListaHospedes(String chatId, String mensagem, List<Hospede> hospedes) {
         InlineKeyboardMarkup inlineKeyboardMarkup = keyboardService.montaHospedesKeyboard(hospedes);
-        return new SendMessage(chatId, mensagem).enableHtml(true).setReplyMarkup(inlineKeyboardMarkup);
+        return SendMessage.builder().chatId(chatId).text(mensagem).replyMarkup(inlineKeyboardMarkup).parseMode("html").build();
     }
 
-    private SendMessage exibeResumoDadosHospedes(Long chatId, Sessao sessao) {
+    private SendMessage exibeResumoDadosHospedes(String chatId, Sessao sessao) {
         ReservaDTO reservaDTO = sessao.getReservaDTO();
 
         String mensagem = "Tudo certinho, jovem?" + "\n\n" + hospedeService.dadosHospoedesToString(reservaDTO.getHospedes());
         InlineKeyboardMarkup inlineKeyboardMarkup = keyboardService.montaConfirmacaoHospedesKeyboard();
 
-        return new SendMessage(chatId, mensagem).enableHtml(true).setReplyMarkup(inlineKeyboardMarkup);
+        return SendMessage.builder().chatId(chatId).text(mensagem).replyMarkup(inlineKeyboardMarkup).parseMode("html").build();
     }
 
-    SendMediaGroup criaMediaGroup(Long chatId, String urlThumbnail, List<String> urlFotos) {
-        SendMediaGroup sendMediaGroup = new SendMediaGroup().setChatId(chatId).disableNotification();
-
+    SendMediaGroup criaMediaGroup(String chatId, String urlThumbnail, List<String> urlFotos) {
         List<String> urls = new ArrayList<>();
         urls.add(urlThumbnail);
+        urls.add(urlThumbnail);
+
         urls.addAll(urlFotos);
 
         List<InputMedia> medias = new ArrayList<>();
         for (String urlFoto : urls) {
-            medias.add(new InputMediaPhoto().setMedia(urlFoto));
+            medias.add(InputMediaPhoto.builder().media(urlFoto).build());
         }
 
-        sendMediaGroup.setMedia(medias);
-
-        return sendMediaGroup;
+        return SendMediaGroup.builder().chatId(chatId).medias(medias).disableNotification(true).build();
     }
 
 }

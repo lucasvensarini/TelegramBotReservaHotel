@@ -13,8 +13,8 @@ public class PassoCidade implements Passo {
 
     private static final String MENSAGEM_DEFINICAO_ADULTO = "Adultos são pessoas com idade maior que 12 anos";
 
-    private TextoUtil textoUtil;
-    private KeyboardService keyboardService;
+    private final TextoUtil textoUtil;
+    private final KeyboardService keyboardService;
 
     @Autowired
     public PassoCidade(TextoUtil textoUtil, KeyboardService keyboardService) {
@@ -23,7 +23,7 @@ public class PassoCidade implements Passo {
     }
 
     @Override
-    public SendMessage executa(Long chatId, String texto, Sessao sessao) {
+    public SendMessage executa(String chatId, String texto, Sessao sessao) {
         String textoFormatado = textoUtil.normalizaTexto(texto);
 
         sessao.getReservaDTO().getDadosBusca().defineCidade(textoFormatado);
@@ -32,7 +32,7 @@ public class PassoCidade implements Passo {
         String mensagem = "Massa! E quantos adultos vão se hospedar?" + "\n\n" + MENSAGEM_DEFINICAO_ADULTO;
         InlineKeyboardMarkup inlineKeyboardMarkup = keyboardService.montaQtdHospedesKeyboard(KeyboardService.PREFIXO_CALLBACK_HOSPEDES_ADT);
 
-        return new SendMessage(chatId, mensagem).setReplyMarkup(inlineKeyboardMarkup);
+        return SendMessage.builder().chatId(chatId).text(mensagem).replyMarkup(inlineKeyboardMarkup).build();
     }
 
 }

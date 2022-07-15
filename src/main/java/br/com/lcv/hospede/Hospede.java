@@ -105,7 +105,7 @@ public class Hospede {
 
     public void defineCPF(String cpf) {
         try {
-            Integer.parseInt(cpf);
+            Long.parseLong(cpf);
             if (!cpf.isEmpty()) {
                 setCpf(cpf);
             } else {

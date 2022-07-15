@@ -9,15 +9,15 @@ import org.springframework.stereotype.Service;
 @Service
 public class UsuarioService {
 
-    private UsuarioRepository usuarioRepository;
+    private final UsuarioRepository usuarioRepository;
 
     @Autowired
     public UsuarioService(UsuarioRepository usuarioRepository) {
         this.usuarioRepository = usuarioRepository;
     }
 
-    public Usuario buscaUsuarioPorTelegramId(int telegramId) {
-        return usuarioRepository.findUsuarioByTelegramId(telegramId).orElseThrow(UsuarioNaoAutorizadoException::new);
+    public void buscaUsuarioPorTelegramId(long telegramId) {
+        usuarioRepository.findUsuarioByTelegramId(telegramId).orElseThrow(UsuarioNaoAutorizadoException::new);
     }
 
 }

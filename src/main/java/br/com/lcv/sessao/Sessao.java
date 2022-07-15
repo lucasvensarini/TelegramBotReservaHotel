@@ -25,11 +25,11 @@ public class Sessao {
     private static final String QUARTO_SELECIONADO = "quartoSelecionado";
     private static final String HOSPEDE_CORRENTE = "hospedeCorrente";
     private static final String PASSO_CORRENTE = "passoCorrente";
-    private boolean usuarioAutorizado;
-    private boolean iniciada;
-    private LocalDateTime dataInicio;
-    private long timeout;
-    private Map<String, Object> atributos;
+    private final boolean usuarioAutorizado;
+    private final boolean iniciada;
+    private final LocalDateTime dataInicio;
+    private final long timeout;
+    private final Map<String, Object> atributos;
 
     Sessao() {
         this.usuarioAutorizado = true;

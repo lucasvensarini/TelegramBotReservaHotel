@@ -18,7 +18,7 @@ public class PassoCallbackSexoHospede implements PassoCallback {
 
     private static final String MENSAGEM_EXEMPLO_DATA = "Digite a data no formato dd/mm/aaaa. Ex: 10/09/2019";
 
-    private MensagemUtil mensagemUtil;
+    private final MensagemUtil mensagemUtil;
 
     @Autowired
     public PassoCallbackSexoHospede(MensagemUtil mensagemUtil) {
@@ -26,7 +26,7 @@ public class PassoCallbackSexoHospede implements PassoCallback {
     }
 
     @Override
-    public List<Mensagem> executa(Integer usuarioTelegramId, Long chatId, String valorCallback, Sessao sessao) {
+    public List<Mensagem> executa(long usuarioTelegramId, String chatId, String valorCallback, Sessao sessao) {
         List<Mensagem> mensagens = new ArrayList<>();
 
         Hospede hospedeCorrente = sessao.getHospedeCorrente();
@@ -38,7 +38,6 @@ public class PassoCallbackSexoHospede implements PassoCallback {
         boolean todosDadosPreenchidos = hospedeCorrente.isTodosDadosPreenchidos();
         if (!todosDadosPreenchidos) {
             sessao.adicionaAtributoPassoCorrente(PassoCorrente.PREENCHIMENTO_DATA_NASCIMENTO);
-
             sendMessage = new SendMessage(chatId, "Data de nascimento?" + "\n\n" + MENSAGEM_EXEMPLO_DATA);
         } else {
             sendMessage = mensagemUtil.exibeResumoInformacoesOuContnuaPreenchendoDados(chatId, sessao);

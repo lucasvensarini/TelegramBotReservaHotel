@@ -16,7 +16,7 @@ import java.util.List;
 public class PassoCallbackPreencherHospedes implements PassoCallback {
 
     @Override
-    public List<Mensagem> executa(Integer usuarioTelegramId, Long chatId, String valorCallback, Sessao sessao) {
+    public List<Mensagem> executa(long usuarioTelegramId, String chatId, String valorCallback, Sessao sessao) {
         List<Mensagem> mensagens = new ArrayList<>();
 
         int indiceHospede = Integer.parseInt(valorCallback);

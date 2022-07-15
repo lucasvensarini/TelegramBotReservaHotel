@@ -25,10 +25,10 @@ import java.util.List;
 @Component
 public class PassoCallbackConfirmacaoInformacoesReserva implements PassoCallback {
 
-    private KeyboardService keyboardService;
-    private HospedeService hospedeService;
-    private ReservaService reservaService;
-    private SessaoService sessaoService;
+    private final KeyboardService keyboardService;
+    private final HospedeService hospedeService;
+    private final ReservaService reservaService;
+    private final SessaoService sessaoService;
 
     @Autowired
     public PassoCallbackConfirmacaoInformacoesReserva(KeyboardService keyboardService, HospedeService hospedeService,
@@ -40,7 +40,7 @@ public class PassoCallbackConfirmacaoInformacoesReserva implements PassoCallback
     }
 
     @Override
-    public List<Mensagem> executa(Integer usuarioTelegramId, Long chatId, String valorCallback, Sessao sessao) {
+    public List<Mensagem> executa(long usuarioTelegramId, String chatId, String valorCallback, Sessao sessao) {
         List<Mensagem> mensagens = new ArrayList<>();
 
         ReservaDTO reservaDTO = sessao.getReservaDTO();
@@ -52,7 +52,7 @@ public class PassoCallbackConfirmacaoInformacoesReserva implements PassoCallback
             sessao.adicionaAtributoPassoCorrente(PassoCorrente.ESCOLHA_RESPONSAVEL);
             String texto = "Só uma última perguntinha para finalizar: quem vai ser o responsável pela reserva?";
             InlineKeyboardMarkup inlineKeyboardMarkup = keyboardService.montaResponsavelReservaKeyboard(reservaDTO.getHospedes());
-            SendMessage sendMessage = new SendMessage(chatId, texto).setReplyMarkup(inlineKeyboardMarkup);
+            SendMessage sendMessage = SendMessage.builder().chatId(chatId).text(texto).replyMarkup(inlineKeyboardMarkup).build();
             mensagens.add(new Mensagem(sendMessage));
         } else {
             Hospede hospedeResponsavel = hospedeService.selecionaHospedeAdulto(reservaDTO.getHospedes());
@@ -62,7 +62,7 @@ public class PassoCallbackConfirmacaoInformacoesReserva implements PassoCallback
         return mensagens;
     }
 
-    private List<Mensagem> criaReserva(Integer usuarioTelegramId, Long chatId, ReservaDTO reservaDTO, Hotel hotelSelecionado,
+    private List<Mensagem> criaReserva(long usuarioTelegramId, String chatId, ReservaDTO reservaDTO, Hotel hotelSelecionado,
                                        Quarto quartoSelecionado, Hospede hospedeResponsavel) {
 
         List<Mensagem> mensagens = new ArrayList<>();
@@ -79,14 +79,15 @@ public class PassoCallbackConfirmacaoInformacoesReserva implements PassoCallback
         return mensagens;
     }
 
-    private SendMessage exibeInformacoesReserva(Long chatId, Reserva reserva) {
+    private SendMessage exibeInformacoesReserva(String chatId, Reserva reserva) {
         String mensagem = "Sua reserva foi criada com sucesso! Segue informações:" + "\n\n" + reserva.listaDadosReserva();
-        return new SendMessage(chatId, mensagem).enableHtml(true);
+        return SendMessage.builder().chatId(chatId).text(mensagem).build();
+//        return new SendMessage(chatId, mensagem).enableHtml(true);
     }
 
-    private SendMessage enviaMensagemInicial(Long chatId) {
+    private SendMessage enviaMensagemInicial(String chatId) {
         String mensagem = "Utilize os seguintes comandos:" + "\n\n" + "/reservarhotel - Inicia processo de reserva de hotel.";
-        return new SendMessage(chatId, mensagem);
+        return SendMessage.builder().chatId(chatId).text(mensagem).build();
     }
 
 }

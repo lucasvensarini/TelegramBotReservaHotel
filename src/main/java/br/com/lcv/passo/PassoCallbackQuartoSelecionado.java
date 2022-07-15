@@ -17,7 +17,7 @@ import java.util.List;
 @Component
 public class PassoCallbackQuartoSelecionado implements PassoCallback {
 
-    private KeyboardService keyboardService;
+    private final KeyboardService keyboardService;
 
     @Autowired
     public PassoCallbackQuartoSelecionado(KeyboardService keyboardService) {
@@ -25,7 +25,7 @@ public class PassoCallbackQuartoSelecionado implements PassoCallback {
     }
 
     @Override
-    public List<Mensagem> executa(Integer usuarioTelegramId, Long chatId, String valorCallback, Sessao sessao) {
+    public List<Mensagem> executa(long usuarioTelegramId, String chatId, String valorCallback, Sessao sessao) {
         List<Mensagem> mensagens = new ArrayList<>();
 
         sessao.adicionaAtributoPassoCorrente(PassoCorrente.PREENCHIMENTO_HOSPEDES);
@@ -34,7 +34,7 @@ public class PassoCallbackQuartoSelecionado implements PassoCallback {
 
         String mensagem = "Vamos começar a preencher os dados dos hóspedes.";
         InlineKeyboardMarkup inlineKeyboardMarkup = keyboardService.montaHospedesKeyboard(hospedes);
-        SendMessage sendMessage = new SendMessage(chatId, mensagem).setReplyMarkup(inlineKeyboardMarkup);
+        SendMessage sendMessage = SendMessage.builder().chatId(chatId).text(mensagem).replyMarkup(inlineKeyboardMarkup).build();
 
         mensagens.add(new Mensagem(sendMessage));
 

@@ -12,28 +12,28 @@ import java.util.Map;
 @Service
 public class SessaoService {
 
-    private Map<Integer, Sessao> sessoes;
+    private final Map<Long, Sessao> sessoes;
 
     public SessaoService() {
         this.sessoes = new HashMap<>();
     }
 
-    public Sessao iniciaSessaoUsuario(Integer usuarioId) {
+    public Sessao iniciaSessaoUsuario(long usuarioId) {
         Sessao sessao = new Sessao();
         sessoes.put(usuarioId, sessao);
 
         return sessao;
     }
 
-    public Sessao buscaSessaoUsuario(Integer usuarioId) {
+    public Sessao buscaSessaoUsuario(long usuarioId) {
         return sessoes.get(usuarioId);
     }
 
-    public void encerraSessaoUsuario(Integer usuarioId) {
+    public void encerraSessaoUsuario(long usuarioId) {
         sessoes.remove(usuarioId);
     }
 
-    public void validaUsuario(int usuarioId) {
+    public void validaUsuario(long usuarioId) {
         Sessao sessao = buscaSessaoUsuario(usuarioId);
 
         boolean autorizado = sessao != null && sessao.isUsuarioAutorizado();
@@ -42,7 +42,7 @@ public class SessaoService {
         }
     }
 
-    public void validaSessao(int usuarioId) {
+    public void validaSessao(long usuarioId) {
         Sessao sessao = buscaSessaoUsuario(usuarioId);
 
         boolean sessaoValida = sessao != null && sessao.isSessaoValida();

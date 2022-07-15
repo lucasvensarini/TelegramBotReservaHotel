@@ -12,7 +12,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 @Component
 public class PassoDataNascimento implements Passo {
 
-    private MensagemUtil mensagemUtil;
+    private final MensagemUtil mensagemUtil;
 
     @Autowired
     public PassoDataNascimento(MensagemUtil mensagemUtil) {
@@ -20,7 +20,7 @@ public class PassoDataNascimento implements Passo {
     }
 
     @Override
-    public SendMessage executa(Long chatId, String texto, Sessao sessao) {
+    public SendMessage executa(String chatId, String texto, Sessao sessao) {
         Hospede hospede = sessao.getHospedeCorrente();
         hospede.defineDataNascimento(texto);
 

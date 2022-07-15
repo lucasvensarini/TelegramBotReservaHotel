@@ -18,7 +18,7 @@ import java.util.List;
 @Component
 public class PassoCallbackListarDadosParaAlteracao implements PassoCallback {
 
-    private KeyboardService keyboardService;
+    private final KeyboardService keyboardService;
 
     @Autowired
     public PassoCallbackListarDadosParaAlteracao(KeyboardService keyboardService) {
@@ -26,7 +26,7 @@ public class PassoCallbackListarDadosParaAlteracao implements PassoCallback {
     }
 
     @Override
-    public List<Mensagem> executa(Integer usuarioTelegramId, Long chatId, String valorCallback, Sessao sessao) {
+    public List<Mensagem> executa(long usuarioTelegramId, String chatId, String valorCallback, Sessao sessao) {
         List<Mensagem> mensagens = new ArrayList<>();
 
         int indiceHospede = Integer.parseInt(valorCallback);
@@ -39,7 +39,7 @@ public class PassoCallbackListarDadosParaAlteracao implements PassoCallback {
         sessao.adicionaAtributoPassoCorrente(PassoCorrente.MODIFICAR_DADOS_HOSPEDES);
 
         InlineKeyboardMarkup inlineKeyboardMarkup = keyboardService.montaDadosHospedeKeyboard(hospede);
-        SendMessage sendMessage = new SendMessage(chatId, "Qual informação você quer alterar?").setReplyMarkup(inlineKeyboardMarkup);
+        SendMessage sendMessage = SendMessage.builder().chatId(chatId).text("Qual informação você quer alterar?").replyMarkup(inlineKeyboardMarkup).build();
 
         mensagens.add(new Mensagem(sendMessage));
 

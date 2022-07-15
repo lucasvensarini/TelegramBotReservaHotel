@@ -13,7 +13,7 @@ import java.util.List;
 @Component
 public class PassoCallbackSairModificacaoDadosHospedes implements PassoCallback {
 
-    private MensagemUtil mensagemUtil;
+    private final MensagemUtil mensagemUtil;
 
     @Autowired
     public PassoCallbackSairModificacaoDadosHospedes(MensagemUtil mensagemUtil) {
@@ -21,7 +21,7 @@ public class PassoCallbackSairModificacaoDadosHospedes implements PassoCallback 
     }
 
     @Override
-    public List<Mensagem> executa(Integer usuarioTelegramId, Long chatId, String valorCallback, Sessao sessao) {
+    public List<Mensagem> executa(long usuarioTelegramId, String chatId, String valorCallback, Sessao sessao) {
         List<Mensagem> mensagens = new ArrayList<>();
 
         mensagens.add(new Mensagem(mensagemUtil.exibeResumoInformacoesOuContnuaPreenchendoDados(chatId, sessao)));

@@ -8,7 +8,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 @Component
 public class PassoNomeHotel implements Passo {
 
-    private MensagemUtil mensagemUtil;
+    private final MensagemUtil mensagemUtil;
 
     @Autowired
     public PassoNomeHotel(MensagemUtil mensagemUtil) {
@@ -16,7 +16,7 @@ public class PassoNomeHotel implements Passo {
     }
 
     @Override
-    public SendMessage executa(Long chatId, String texto, Sessao sessao) {
+    public SendMessage executa(String chatId, String texto, Sessao sessao) {
         sessao.getReservaDTO().getDadosBusca().defineNomeHotel(texto);
         sessao.adicionaAtributoPassoCorrente(PassoCorrente.PREENCHIMENTO_CIDADE);
 

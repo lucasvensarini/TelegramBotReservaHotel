@@ -13,7 +13,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 @Component
 public class PassoDataSaida implements Passo {
 
-    private KeyboardService keyboardService;
+    private final KeyboardService keyboardService;
 
     @Autowired
     public PassoDataSaida(KeyboardService keyboardService) {
@@ -21,13 +21,13 @@ public class PassoDataSaida implements Passo {
     }
 
     @Override
-    public SendMessage executa(Long chatId, String texto, Sessao sessao) {
+    public SendMessage executa(String chatId, String texto, Sessao sessao) {
         sessao.getReservaDTO().getDadosBusca().defineDataSaida(texto);
         sessao.adicionaAtributoPassoCorrente(PassoCorrente.PREENCHIMENTO_CLASSIFICACAO_HOTEL);
 
         InlineKeyboardMarkup inlineKeyboardMarkup = keyboardService.montaClassificacaoHotelKeyboard();
 
-        return new SendMessage(chatId, "Gostaria de filtrar por classificação?").setReplyMarkup(inlineKeyboardMarkup);
+        return SendMessage.builder().chatId(chatId).text("Gostaria de filtrar por classificação?").replyMarkup(inlineKeyboardMarkup).build();
     }
 
 }

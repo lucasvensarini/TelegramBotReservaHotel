@@ -51,10 +51,10 @@ public class Reserva {
     private BigDecimal valor;
 
     @JoinColumn(referencedColumnName = "telegramId", nullable = false)
-    private int usuarioTelegramId;
+    private long usuarioTelegramId;
 
     Reserva(String loc, LocalDateTime dataCriacao, LocalDateTime dataEntrada, LocalDateTime dataSaida, Hotel hotel, Quarto quarto,
-            Hospede hospedeResponsavel, List<Hospede> hospedes, BigDecimal valor, int usuarioTelegramId) {
+            Hospede hospedeResponsavel, List<Hospede> hospedes, BigDecimal valor, long usuarioTelegramId) {
         this.loc = loc;
         this.dataCriacao = dataCriacao;
         this.dataEntrada = dataEntrada;
